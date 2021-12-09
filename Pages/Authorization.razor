@@ -1,5 +1,38 @@
 ﻿@page "/authorization"
 
-@code {
+<div class="registration">
+    <div></div>
 
+    <div class="on_border">
+        <div class="border">
+
+            <div class="title_reg">
+                <div><h1>Вход в личный кабинет</h1></div>
+                <div><span>Пожалуйста, введите номер телефона и пароль</span></div>
+            </div>
+
+            <div class="autho_field_list">
+                <li><input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер телефона / Логин" required></li>
+                <li><input @bind-value="Password" class="field" type="text" maxlength="20" placeholder="Пароль" required></li>
+            </div>
+
+            <div class="reg_button">
+                <div><a @onclick="Authorize" href="/account">Вход в личный кабинет</a></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div></div>
+</div>
+
+@code {
+    private string PhoneNumber { get; set; }
+    private string Password { get; set; }
+    private User user { get; set; }
+
+    public void Authorize()
+    {
+         user.Authorization(PhoneNumber, Password);
+    }
 }

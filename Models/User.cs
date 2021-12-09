@@ -1,53 +1,95 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace StateServices
+namespace Project_State_Services.Models
 {
     public class User
     {
+        public User(string firstName, string surname, string patronymic, 
+            DateTime birthDate, string email, string loginPhoneNumber, string password, 
+            Address fullAddress, string passportNumber, string medicalPolicyNumber, 
+            string taxIdenticalNumber, string insuranceNumber)
+        {
+            FirstName = firstName;
+            Surname = surname;
+            Patronymic = patronymic;
+            BirthDate = birthDate;
+            Email = email;
+            LoginPhoneNumber = loginPhoneNumber;
+            Password = password;
+            FullAddress = fullAddress;
+            PassportNumber = passportNumber;
+            MedicalPolicyNumber = medicalPolicyNumber;
+            TaxIdenticalNumber = taxIdenticalNumber;
+            InsuranceNumber = insuranceNumber;
+        }
+        public User(string firstName, string surname, string patronymic,
+            string loginPhoneNumber, string password)
+        {
+            FirstName = firstName;
+            Surname = surname;
+            Patronymic = patronymic;
+            LoginPhoneNumber = loginPhoneNumber;
+            Password = password;
+        }
+
         [BsonId]
         public ObjectId _id { get; set; }
         [BsonElement("Имя")]
-        private string FirstName { get; set; }
+        public string FirstName { get; set; }
         [BsonElement("Фамилия")]
-        private string Surname { get; set; }
+        public string Surname { get; set; }
         [BsonElement("Отчество")]
-        private string Patronymic { get; set; }
+        public string Patronymic { get; set; }
         [BsonElement("Дата рождения")]
         public DateTime BirthDate { get; set; }
         [BsonElement("Электронная почта")]
-        private string Email { get; set; }
+        public string Email { get; set; }
         [BsonElement("Номер телефона / Логин")]
-        private string LoginPhoneNamber { get; set; }
+        public string LoginPhoneNumber { get; set; }
         [BsonElement("Пароль")]
-        private string Password { get; set; }
+        public string Password { get; set; }
         [BsonElement("Полный адрес")]
         public Address FullAddress { get; set; }
 
         [BsonElement("Серия и номер паспорта")]
-        private string PassportNumber { get; set; }
+        public string PassportNumber { get; set; }
         [BsonElement("Номер медицинского полиса")]
-        private string MedicalPolicyNumber { get; set; }
+        public string MedicalPolicyNumber { get; set; }
         [BsonElement("ИНН")]
-        private string TaxIdenticalNumber { get; set; }
+        public string TaxIdenticalNumber { get; set; }
         [BsonElement("СНИЛС")]
-        private string InsuranceNumber { get; set; }
-        private bool IsRegistered { get; set; }
-        private bool IsAuthorized { get; set; }
+        public string InsuranceNumber { get; set; }
+        //private bool IsRegistered { get; set; }
+        //private bool IsAuthorized { get; set; }
 
 
-        public void Registration()
+        public static void Registration(User user)
         {
-
+            var client = new MongoClient("mongodb://localhost");
+            var db = client.GetDatabase("State_Services_Users");
+            var collection = db.GetCollection<User>("Users");
+            collection.InsertOne(user);
+        }
+        public User Authorization(string login, string password)
+        {
+            var client = new MongoClient("mongodb://localhost");
+            var db = client.GetDatabase("State_Services_Users");
+            var collection = db.GetCollection<User>("Users");
+            return collection.Find(filter => Password == password && LoginPhoneNumber == login).FirstOrDefault();
         }
 
-        public void Authorization()
+        public static List<User> UserList()
         {
-
+            var client = new MongoClient("mongodb://localhost");
+            var db = client.GetDatabase("State_Services_Users");
+            var collection = db.GetCollection<User>("Users");
+            return collection.Find(x => true).ToList();
         }
     }
 }

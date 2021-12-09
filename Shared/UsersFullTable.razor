@@ -1,0 +1,36 @@
+﻿<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Логин</th>
+                <th>Пароль</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in users)
+            {
+                <tr>
+                    <td>@item._id</td>
+                    <td>@item.Surname</td>
+                    <td>@item.FirstName</td>
+                    <td>@item.Patronymic</td>
+                    <td>@item.LoginPhoneNumber</td>
+                    <td>@item.Password</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private List<User> users { get; set; }
+
+    protected override void OnInitialized()
+    {
+        users = User.UserList();
+    }
+}

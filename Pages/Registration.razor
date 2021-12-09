@@ -12,24 +12,24 @@
             </div>
 
             <div class="field_list">
-                <li><input class="field" type="text" maxlength="20" placeholder="Номер телефона / Логин" required></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Пароль" required></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Фамилия" required></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Имя" required></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Отчество" required></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Дата рождения" required></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Электронная почта" required></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Серия и номер паспорта" required></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Город проживания" required></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Улица" required></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Номер дома" required></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Номер квартиры"></li>
-                <li><input class="field" type="text" maxlength="20" placeholder="Номер медицинского полиса" required></li>
-                <li><input class="field email" type="text" maxlength="20" placeholder="ИНН" required></li>
+                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер телефона / Логин" required>
+                <input @bind-value="Password" class="field" type="text" maxlength="20" placeholder="Пароль" required>
+                <input @bind-value="Surname" class="field" type="text" maxlength="20" placeholder="Фамилия" required>
+                <input @bind-value="Name" class="field" type="text" maxlength="20" placeholder="Имя" required>
+                <input @bind-value="Patronymic" class="field" type="text" maxlength="20" placeholder="Отчество" required>
+                @*<input @bind-value="BirthDate" class="field" type="text" maxlength="20" placeholder="Дата рождения" required>
+                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Электронная почта" required>
+                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Серия и номер паспорта" required>
+                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Город проживания" required>
+                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Улица" required>
+                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер дома" required>
+                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер квартиры">
+                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер медицинского полиса" required>
+                <input @bind-value="PhoneNumber" class="field email" type="text" maxlength="20" placeholder="ИНН" required>*@
             </div>
 
             <div class="reg_button">
-                <div><a href="#">Регистрация</a></div>
+                <div><a @onclick="RegistrToDB" href="#">Регистрация</a></div>
             </div>
 
         </div>
@@ -39,5 +39,15 @@
 </div>
 
 @code {
+    private string PhoneNumber { get; set; }
+    private string Password { get; set; }
+    private string Surname { get; set; }
+    private string Name { get; set; }
+    private string Patronymic { get; set; }
+
+    public void RegistrToDB()
+    {
+        User.Registration(new User(Name, Surname, Patronymic, PhoneNumber, Password));
+    }
 
 }
