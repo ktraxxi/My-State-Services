@@ -1,4 +1,4 @@
-@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+/*@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');*/
 
 * {
     margin: 0;
@@ -172,14 +172,16 @@
     height: 100px;
     display: grid;
     grid-template-columns: 20% 30% 30% 20%;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .footer_text {
     align-self: center;
+   
 }
 
 .zag {
-    font-family: 'Montserrat', sans-serif;
+    
     font-size: 24px;
     color: white;
 }

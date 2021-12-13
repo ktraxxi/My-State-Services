@@ -1,4 +1,5 @@
 ﻿@page "/authorization"
+@inject IJSRuntime js
 
 <div class="registration">
     <div></div>
@@ -17,7 +18,7 @@
             </div>
 
             <div class="reg_button">
-                <div><a @onclick="Authorize" href="/account">Вход в личный кабинет</a></div>
+                <div><a @onclick="AuthorizeAndStorage" href="/account">Вход в личный кабинет</a></div>
             </div>
 
         </div>
@@ -27,12 +28,35 @@
 </div>
 
 @code {
-    private string PhoneNumber { get; set; }
-    private string Password { get; set; }
-    private User user { get; set; }
+    public string PhoneNumber { get; set; }
+    public string Password { get; set; }
+    public User MyUser { get; set; }
+    LocalStorageService storage;
+
+    public void AuthorizeAndStorage()
+    {
+        Authorize();
+        LocalStorageSave();
+    }
 
     public void Authorize()
     {
-         user.Authorization(PhoneNumber, Password);
+        MyUser = User.Authorization(PhoneNumber, Password, MyUser);
     }
+
+    protected override void OnInitialized()
+    {
+        storage = new LocalStorageService(js);
+    }
+
+    public async void LocalStorageSave()
+    {
+        await storage.SetStringAsync("key", MyUser.FirstName);
+    }
+
+    //public async void LocalStorageLoad()
+    //{
+    //    str1 = await storage.GetStringAsync("number");
+    //    StateHasChanged();
+    //}
 }

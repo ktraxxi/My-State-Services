@@ -1,8 +1,10 @@
-﻿<div class="table-responsive">
+﻿@inject IJSRuntime js
+
+<div class="table-responsive">
     <table class="table table-striped">
         <tbody>
             <tr> <td>Фамилия</td> <td>still empty</td> </tr>
-            <tr> <td>Имя</td> <td>still empty</td> </tr>
+            <tr> <td>Имя</td> <td>@Name</td> </tr>
             <tr> <td>Отчество</td> <td>still empty</td> </tr>
 
             <tr> <td>Дата рождения</td> <td>still empty</td> </tr>
@@ -21,5 +23,18 @@
 </div>
 
 @code {
+    public string Name { get; set; }
+    public string Surname { get; set; }
+    LocalStorageService storage;
 
+    public async void LocalStorageLoadName()
+    {
+        Name = await storage.GetStringAsync("key");
+        StateHasChanged();
+    }
+    protected override void OnInitialized()
+    {
+        storage = new LocalStorageService(js);
+        LocalStorageLoadName();
+    }
 }

@@ -76,12 +76,13 @@ namespace Project_State_Services.Models
             var collection = db.GetCollection<User>("Users");
             collection.InsertOne(user);
         }
-        public User Authorization(string login, string password)
+        public static User Authorization(string login, string password, User user)
         {
             var client = new MongoClient("mongodb://localhost");
             var db = client.GetDatabase("State_Services_Users");
             var collection = db.GetCollection<User>("Users");
-            return collection.Find(filter => Password == password && LoginPhoneNumber == login).FirstOrDefault();
+            user = collection.Find(filter => filter.Password == password && filter.LoginPhoneNumber == login).FirstOrDefault();
+            return user;
         }
 
         public static List<User> UserList()
