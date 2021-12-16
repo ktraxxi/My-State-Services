@@ -13,7 +13,8 @@ namespace Project_State_Services.Models
         public User(string firstName, string surname, string patronymic, 
             DateTime birthDate, string email, string loginPhoneNumber, string password, 
             Address fullAddress, string passportNumber, string medicalPolicyNumber, 
-            string taxIdenticalNumber, string insuranceNumber)
+            string taxIdenticalNumber, string insuranceNumber, 
+            string city, string street, string buildingNumber, string appartmentNumber)
         {
             FirstName = firstName;
             Surname = surname;
@@ -22,11 +23,14 @@ namespace Project_State_Services.Models
             Email = email;
             LoginPhoneNumber = loginPhoneNumber;
             Password = password;
-            FullAddress = fullAddress;
             PassportNumber = passportNumber;
             MedicalPolicyNumber = medicalPolicyNumber;
             TaxIdenticalNumber = taxIdenticalNumber;
             InsuranceNumber = insuranceNumber;
+            City = city;
+            Street = street;
+            BuildingNumber = buildingNumber;
+            AppartmentNumber = appartmentNumber;
         }
         public User(string firstName, string surname, string patronymic,
             string loginPhoneNumber, string password)
@@ -54,8 +58,6 @@ namespace Project_State_Services.Models
         public string LoginPhoneNumber { get; set; }
         [BsonElement("Пароль")]
         public string Password { get; set; }
-        [BsonElement("Полный адрес")]
-        public Address FullAddress { get; set; }
 
         [BsonElement("Серия и номер паспорта")]
         public string PassportNumber { get; set; }
@@ -65,6 +67,15 @@ namespace Project_State_Services.Models
         public string TaxIdenticalNumber { get; set; }
         [BsonElement("СНИЛС")]
         public string InsuranceNumber { get; set; }
+        [BsonElement("Город проживания")]
+        public string City { get; set; }
+        [BsonElement("Улица")]
+        public string Street { get; set; }
+        [BsonElement("Номер дома")]
+        public string BuildingNumber { get; set; }
+        [BsonElement("Номер квартиры")]
+        [BsonIgnoreIfNull]
+        public string AppartmentNumber { get; set; }
         //private bool IsRegistered { get; set; }
         //private bool IsAuthorized { get; set; }
 

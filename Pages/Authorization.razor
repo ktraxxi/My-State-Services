@@ -51,7 +51,22 @@
 
     public async void LocalStorageSave()
     {
-        await storage.SetStringAsync("key", MyUser.FirstName);
+        await storage.SetStringAsync("key-name", MyUser.FirstName);
+        await storage.SetStringAsync("key-surname", MyUser.Surname);
+        await storage.SetStringAsync("key-patronymic", MyUser.Patronymic);
+        await storage.SetStringAsync("key-birth", MyUser.BirthDate.ToString());
+        await storage.SetStringAsync("key-email", MyUser.Email);
+        await storage.SetStringAsync("key-login", MyUser.LoginPhoneNumber);
+        await storage.SetStringAsync("key-password", MyUser.Password);
+        await storage.SetStringAsync("key-passport", MyUser.PassportNumber);
+        await storage.SetStringAsync("key-polis", MyUser.MedicalPolicyNumber);
+        await storage.SetStringAsync("key-inn", MyUser.TaxIdenticalNumber);
+        await storage.SetStringAsync("key-snils", MyUser.InsuranceNumber);
+        await storage.SetStringAsync("key-city", MyUser.City);
+        await storage.SetStringAsync("key-street", MyUser.Street);
+        await storage.SetStringAsync("key-building", MyUser.BuildingNumber);
+        await storage.SetStringAsync("key-appartment", MyUser.AppartmentNumber);
+
     }
 
     //public async void LocalStorageLoad()

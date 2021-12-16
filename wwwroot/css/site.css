@@ -244,6 +244,14 @@
     padding: 5px;
     font-family: 'Montserrat', sans-serif;
 }
+.field_account {
+    height: 30px;
+    width: 150px;
+    border: 2px solid #548CF6;
+    border-radius: 8px;
+    padding: 5px;
+    font-family: 'Montserrat', sans-serif;
+}
 
 .title_reg {
     display: flex;
@@ -297,4 +305,84 @@
     .autho_field_list li {
         padding: 5px;
         list-style-type: none;
+    }
+
+/*Личный кабинет*/
+
+.account {
+    display: grid;
+    /*border: 1px solid black;*/
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 7fr 1fr;
+}
+
+.table {
+    /*border: 1px solid black;*/
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+.photo_and_btns {
+    /*border: 1px solid black;*/
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+.edit_btn {
+    /*border: 1px solid black;*/
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+.exit_btn {
+    /*border: 1px solid black;*/
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
+.field_account {
+    height: 20px;
+    width: 150px;
+    border: 2px solid #548CF6;
+    border-radius: 8px;
+    padding: 5px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.avatar img {
+    height: 200px;
+    width: 200px;
+}
+
+.account_table {
+    font-size: 14px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+th, td:first-child {
+    background: #548CF6;
+    color: white;
+    padding: 10px 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+th, td {
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    border-color: white;
+}
+
+td {
+    background: #EFF5F9;
+    width: 250px;
+    padding: 2px;
+}
+
+    th:first-child, td:first-child {
+        text-align: left;
     }

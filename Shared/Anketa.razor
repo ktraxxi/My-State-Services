@@ -1,40 +1,137 @@
 ﻿@inject IJSRuntime js
 
-<div class="table-responsive">
-    <table class="table table-striped">
-        <tbody>
-            <tr> <td>Фамилия</td> <td>still empty</td> </tr>
-            <tr> <td>Имя</td> <td>@Name</td> </tr>
-            <tr> <td>Отчество</td> <td>still empty</td> </tr>
+<div class="main_part">
+    <div></div>
 
-            <tr> <td>Дата рождения</td> <td>still empty</td> </tr>
-            <tr> <td>Полный адрес</td> <td>still empty</td> </tr>
-            <tr> <td>Электронная почта</td> <td>still empty</td> </tr>
+    <div class="account">
 
-            <tr> <td>Номер телефона / Логин</td> <td>still empty</td> </tr>
-            <tr> <td>Пароль</td> <td>still empty</td> </tr>
-            <tr> <td>Паспорт</td> <td>still empty</td> </tr>
+        <div class="table">
+            <table class="account_table">
+                <tbody>
+                    <tr> <td>Фамилия</td> <td>@Surname</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                    <tr> <td>Имя</td> <td>@Name</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                    <tr> <td>Отчество</td> <td>@Patronymic</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
 
-            <tr> <td>Полис</td> <td>still empty</td> </tr>
-            <tr> <td>ИНН</td> <td>still empty</td> </tr>
-            <tr> <td>СНИЛС</td> <td>still empty</td> </tr>
-        </tbody>
-    </table>
+                    <tr> <td>Дата рождения</td> <td>@BirthDate</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                    <tr> <td>Электронная почта</td> <td>@Email</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                    <tr> <td>Номер телефона</td> <td>@Login</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+
+                    <tr> <td>Пароль</td> <td>@Password</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                    <tr> <td>Паспорт</td> <td>@Passport</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                    <tr> <td>Полис</td> <td>@MedicalPolicyNumber</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+
+                    <tr> <td>ИНН</td> <td>@TaxIdenticalNumber</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                    <tr> <td>СНИЛС</td> <td>@InsuranceNumber</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                    <tr> <td>Город</td> <td>@City</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+
+                    <tr> <td>Улица</td> <td>@Street</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                    <tr> <td>Дом</td> <td>@Building</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                    <tr> <td>Квартира</td> <td>@Appartment</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="photo_and_btns">
+            <div class="avatar">
+                <img src="img/avatar.jpg">
+            </div>
+
+            <div class="upload_avatar">
+                <div class="reg_button">
+                    <div><a href="#">Загрузить фото</a></div>
+                </div>
+            </div>
+
+            <div class="appointment">
+                <div class="reg_button">
+                    <div><a href="#">Мои записи</a></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="edit_btn">
+            <div class="reg_button">
+                <div><a href="#">Редактировать данные</a></div>
+            </div>
+        </div>
+
+        <div class="exit_btn">
+            <div class="reg_button">
+                <div><a @onclick="ClearData" href="/">Выход</a></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div></div>
 </div>
+
+@*<div><a @onclick="ClearData" class="header_button" href="/">Выход</a></div>*@
 
 @code {
     public string Name { get; set; }
     public string Surname { get; set; }
+    public string Patronymic { get; set; }
+    public string BirthDate { get; set; }
+    public string FullAddress { get; set; }
+    public string Email { get; set; }
+    public string Login { get; set; }
+    public string Password { get; set; }
+    public string Passport { get; set; }
+    public string MedicalPolicyNumber { get; set; }
+    public string TaxIdenticalNumber { get; set; }
+    public string InsuranceNumber { get; set; }
+    public string City { get; set; }
+    public string Street { get; set; }
+    public string Building { get; set; }
+    public string Appartment { get; set; }
+
     LocalStorageService storage;
 
     public async void LocalStorageLoadName()
     {
-        Name = await storage.GetStringAsync("key");
+        Name = await storage.GetStringAsync("key-name");
+        Surname = await storage.GetStringAsync("key-surname");
+        Patronymic = await storage.GetStringAsync("key-patronymic");
+        BirthDate = await storage.GetStringAsync("key-birth");
+        FullAddress = await storage.GetStringAsync("key-address");
+        Email = await storage.GetStringAsync("key-email");
+        Login = await storage.GetStringAsync("key-login");
+        Password = await storage.GetStringAsync("key-password");
+        Passport = await storage.GetStringAsync("key-passport");
+        MedicalPolicyNumber = await storage.GetStringAsync("key-polis");
+        TaxIdenticalNumber = await storage.GetStringAsync("key-inn");
+        InsuranceNumber = await storage.GetStringAsync("key-snils");
+        City = await storage.GetStringAsync("key-city");
+        Street = await storage.GetStringAsync("key-street");
+        Building = await storage.GetStringAsync("key-building");
+        Appartment = await storage.GetStringAsync("key-appartment");
         StateHasChanged();
     }
     protected override void OnInitialized()
     {
         storage = new LocalStorageService(js);
         LocalStorageLoadName();
+    }
+    public async void ClearData()
+    {
+        await storage.RemoveAsync("key-name");
+        await storage.RemoveAsync("key-surname");
+        await storage.RemoveAsync("key-patronymic");
+        await storage.RemoveAsync("key-birth");
+        await storage.RemoveAsync("key-address");
+        await storage.RemoveAsync("key-email");
+        await storage.RemoveAsync("key-login");
+        await storage.RemoveAsync("key-password");
+        await storage.RemoveAsync("key-passport");
+        await storage.RemoveAsync("key-polis");
+        await storage.RemoveAsync("key-inn");
+        await storage.RemoveAsync("key-snils");
+        await storage.RemoveAsync("key-city");
+        await storage.RemoveAsync("key-street");
+        await storage.RemoveAsync("key-building");
+        await storage.RemoveAsync("key-appartment");
+
+        StateHasChanged();
     }
 }
