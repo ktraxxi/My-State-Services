@@ -1,13 +1,14 @@
 ﻿@inject IJSRuntime js
+@inject NavigationManager nm
 <div></div>
 
 <div class="logo">
-    <a href="/"><img src="/icons/gosuslugi_logo.svg" /></a>
+    <a href="/"><img src="/icons/icons8-приложение-кошелька-50.png" /></a>
 </div>
 
 <div class="header_menu">
     <ul class="header_refs">
-        <li><a class="header_button" href="/account">Личный кабинет</a></li>
+        <li><a @onclick="CheckIfStorageIsEmpty" class="header_button" href="/account">Личный кабинет</a></li>
         <li><a class="header_button" href="/authorization">Вход</a></li>
         <li><a class="header_button" href="/registration">Регистрация</a></li>
 
@@ -17,5 +18,15 @@
 <div></div>
 
 @code {
-    
+    public void CheckIfStorageIsEmpty()
+    {
+        if (User.isAuthorized == true)
+        {
+            nm.NavigateTo("/account");
+        }
+        else
+        {
+            nm.NavigateTo("/authorization");
+        }
+    }
 }

@@ -1,7 +1,6 @@
 ﻿@page "/registration"
 
-<div class="registration">
-    <div></div>
+
 
     <div class="on_border">
         <div class="border">
@@ -12,20 +11,11 @@
             </div>
 
             <div class="field_list">
-                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер телефона / Логин" required>
-                <input @bind-value="Password" class="field" type="text" maxlength="20" placeholder="Пароль" required>
-                <input @bind-value="Surname" class="field" type="text" maxlength="20" placeholder="Фамилия" required>
-                <input @bind-value="Name" class="field" type="text" maxlength="20" placeholder="Имя" required>
-                <input @bind-value="Patronymic" class="field" type="text" maxlength="20" placeholder="Отчество" required>
-                @*<input @bind-value="BirthDate" class="field" type="text" maxlength="20" placeholder="Дата рождения" required>
-                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Электронная почта" required>
-                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Серия и номер паспорта" required>
-                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Город проживания" required>
-                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Улица" required>
-                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер дома" required>
-                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер квартиры">
-                <input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер медицинского полиса" required>
-                <input @bind-value="PhoneNumber" class="field email" type="text" maxlength="20" placeholder="ИНН" required>*@
+                <div><input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер телефона / Логин" required></div>
+                <div><input @bind-value="Password" class="field" type="text" maxlength="20" placeholder="Пароль" required></div>
+                <div><input @bind-value="Surname" class="field" type="text" maxlength="20" placeholder="Фамилия" required></div>
+                <div><input @bind-value="Name" class="field" type="text" maxlength="20" placeholder="Имя" required></div>
+                <div><input @bind-value="Patronymic" class="field" type="text" maxlength="20" placeholder="Отчество" required></div>
             </div>
 
             <div class="reg_button">
@@ -35,8 +25,6 @@
         </div>
     </div>
 
-    <div></div>
-</div>
 
 @code {
     private string PhoneNumber { get; set; }

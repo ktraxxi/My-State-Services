@@ -1,92 +1,86 @@
 ﻿@inject IJSRuntime js
+@using MongoDB.Bson;
+@using MongoDB.Bson.Serialization.Attributes;
+@using MongoDB.Driver;
 
-<div class="main_part">
-    <div></div>
+<div class="account">
 
-    <div class="account">
+    <div class="table">
+        <table class="account_table">
+            <tbody>
+                <tr> <td>Фамилия</td> <td>@Surname</td> <td><input @bind="Surname" class="field_account2" type="text" maxlength="20"></td> </tr>
+                <tr> <td>Имя</td> <td>@Name</td> <td><input @bind="Name" class="field_account2" type="text" maxlength="20"></td> </tr>
+                <tr> <td>Отчество</td> <td>@Patronymic</td> <td><input @bind="Patronymic" class="field_account2" type="text" maxlength="20"></td> </tr>
 
-        <div class="table">
-            <table class="account_table">
-                <tbody>
-                    <tr> <td>Фамилия</td> <td>@Surname</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-                    <tr> <td>Имя</td> <td>@Name</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-                    <tr> <td>Отчество</td> <td>@Patronymic</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                <tr> <td>Дата рождения</td> <td>@BirthDate</td> <td><input @bind="BirthDate" class="field_account2" type="text" maxlength="20" placeholder="ДД.ММ.ГГГГ"></td> </tr>
+                <tr> <td>Электронная почта</td> <td>@Email</td> <td><input @bind="Email" class="field_account2" type="text" maxlength="20"></td> </tr>
+                <tr> <td>Номер телефона</td> <td>@Login</td> <td><input @bind="Login" class="field_account2" type="text" maxlength="20"></td> </tr>
 
-                    <tr> <td>Дата рождения</td> <td>@BirthDate</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-                    <tr> <td>Электронная почта</td> <td>@Email</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-                    <tr> <td>Номер телефона</td> <td>@Login</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                <tr> <td>Пароль</td> <td>@Password</td> <td><input @bind="Password" class="field_account2" type="text" maxlength="20"></td> </tr>
+                <tr> <td>Паспорт</td> <td>@Passport</td> <td><input @bind="Passport" class="field_account2" type="text" maxlength="20"></td> </tr>
+                <tr> <td>Полис</td> <td>@MedicalPolicyNumber</td> <td><input @bind="MedicalPolicyNumber" class="field_account2" type="text" maxlength="20"></td> </tr>
 
-                    <tr> <td>Пароль</td> <td>@Password</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-                    <tr> <td>Паспорт</td> <td>@Passport</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-                    <tr> <td>Полис</td> <td>@MedicalPolicyNumber</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
+                <tr> <td>ИНН</td> <td>@TaxIdenticalNumber</td> <td><input @bind="TaxIdenticalNumber" class="field_account2" type="text" maxlength="20"></td> </tr>
+                <tr> <td>СНИЛС</td> <td>@InsuranceNumber</td> <td><input @bind="InsuranceNumber" class="field_account2" type="text" maxlength="20"></td> </tr>
+                <tr> <td>Город</td> <td>@City</td> <td><input @bind="City" class="field_account2" type="text" maxlength="20"></td> </tr>
 
-                    <tr> <td>ИНН</td> <td>@TaxIdenticalNumber</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-                    <tr> <td>СНИЛС</td> <td>@InsuranceNumber</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-                    <tr> <td>Город</td> <td>@City</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-
-                    <tr> <td>Улица</td> <td>@Street</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-                    <tr> <td>Дом</td> <td>@Building</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-                    <tr> <td>Квартира</td> <td>@Appartment</td> <td><input class="field_account" type="text" maxlength="20"></td> </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="photo_and_btns">
-            <div class="avatar">
-                <img src="img/avatar.jpg">
-            </div>
-
-            <div class="upload_avatar">
-                <div class="reg_button">
-                    <div><a href="#">Загрузить фото</a></div>
-                </div>
-            </div>
-
-            <div class="appointment">
-                <div class="reg_button">
-                    <div><a href="#">Мои записи</a></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="edit_btn">
-            <div class="reg_button">
-                <div><a href="#">Редактировать данные</a></div>
-            </div>
-        </div>
-
-        <div class="exit_btn">
-            <div class="reg_button">
-                <div><a @onclick="ClearData" href="/">Выход</a></div>
-            </div>
-        </div>
-
+                <tr> <td>Улица</td> <td>@Street</td> <td><input @bind="Street" class="field_account2" type="text" maxlength="20"></td> </tr>
+                <tr> <td>Дом</td> <td>@Building</td> <td><input @bind="Building" class="field_account2" type="text" maxlength="20"></td> </tr>
+                <tr> <td>Квартира</td> <td>@Appartment</td> <td><input @bind="Appartment" class="field_account2" type="text" maxlength="20"></td> </tr>
+            </tbody>
+        </table>
     </div>
 
-    <div></div>
+    <div class="photo_and_btns">
+        <div class="avatar">
+            <img src="/icons/avatar.jpg" />
+        </div>
+
+        <div class="upload_avatar">
+            <div class="reg_button">
+                <div><a href="#">Загрузить фото</a></div>
+            </div>
+        </div>
+
+        <div class="appointment">
+            <div class="reg_button">
+                <div><a href="#">Мои записи</a></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="edit_btn">
+        <div class="reg_button">
+            <div><a @onclick="Editor" href="#" >Редактировать данные</a></div>
+        </div>
+    </div>
+
+    <div class="exit_btn">
+        <div class="reg_button">
+            <div><a @onclick="ClearData" href="/">Выход</a></div>
+        </div>
+    </div>
+
 </div>
 
-@*<div><a @onclick="ClearData" class="header_button" href="/">Выход</a></div>*@
-
 @code {
-    public string Name { get; set; }
-    public string Surname { get; set; }
-    public string Patronymic { get; set; }
-    public string BirthDate { get; set; }
-    public string FullAddress { get; set; }
-    public string Email { get; set; }
-    public string Login { get; set; }
-    public string Password { get; set; }
-    public string Passport { get; set; }
-    public string MedicalPolicyNumber { get; set; }
-    public string TaxIdenticalNumber { get; set; }
-    public string InsuranceNumber { get; set; }
-    public string City { get; set; }
-    public string Street { get; set; }
-    public string Building { get; set; }
-    public string Appartment { get; set; }
 
-    LocalStorageService storage;
+    [BsonIgnoreIfNull]    public string Name { get; set; }
+    [BsonIgnoreIfNull]    public string Surname { get; set; }
+    [BsonIgnoreIfNull]    public string Patronymic { get; set; }
+    [BsonIgnoreIfNull]    public string BirthDate { get; set; }
+    [BsonIgnoreIfNull]    public string Email { get; set; }
+    [BsonIgnoreIfNull]    public string Login { get; set; }
+    [BsonIgnoreIfNull]    public string Password { get; set; }
+    [BsonIgnoreIfNull]    public string Passport { get; set; }
+    [BsonIgnoreIfNull]    public string MedicalPolicyNumber { get; set; }
+    [BsonIgnoreIfNull]    public string TaxIdenticalNumber { get; set; }
+    [BsonIgnoreIfNull]    public string InsuranceNumber { get; set; }
+    [BsonIgnoreIfNull]    public string City { get; set; }
+    [BsonIgnoreIfNull]    public string Street { get; set; }
+    [BsonIgnoreIfNull]    public string Building { get; set; }
+    [BsonIgnoreIfNull]    public string Appartment { get; set; }
+
 
     public async void LocalStorageLoadName()
     {
@@ -94,7 +88,6 @@
         Surname = await storage.GetStringAsync("key-surname");
         Patronymic = await storage.GetStringAsync("key-patronymic");
         BirthDate = await storage.GetStringAsync("key-birth");
-        FullAddress = await storage.GetStringAsync("key-address");
         Email = await storage.GetStringAsync("key-email");
         Login = await storage.GetStringAsync("key-login");
         Password = await storage.GetStringAsync("key-password");
@@ -108,18 +101,21 @@
         Appartment = await storage.GetStringAsync("key-appartment");
         StateHasChanged();
     }
+
+    LocalStorageService storage;
+
     protected override void OnInitialized()
     {
         storage = new LocalStorageService(js);
         LocalStorageLoadName();
     }
+
     public async void ClearData()
     {
         await storage.RemoveAsync("key-name");
         await storage.RemoveAsync("key-surname");
         await storage.RemoveAsync("key-patronymic");
         await storage.RemoveAsync("key-birth");
-        await storage.RemoveAsync("key-address");
         await storage.RemoveAsync("key-email");
         await storage.RemoveAsync("key-login");
         await storage.RemoveAsync("key-password");
@@ -132,6 +128,29 @@
         await storage.RemoveAsync("key-building");
         await storage.RemoveAsync("key-appartment");
 
+        User.IsAuthorizedFalse();
         StateHasChanged();
     }
+
+    public void Editor()
+    {
+        var client = new MongoClient("mongodb://localhost");
+        var db = client.GetDatabase("State_Services_Users");
+        var collection = db.GetCollection<User>("Users");
+
+
+        collection.UpdateOne(x => x.LoginPhoneNumber == Login, Builders<User>.Update
+            .Set(x => x.FirstName, Name).Set(x => x.Surname, Surname).Set(x => x.Patronymic, Patronymic)
+            .Set(x => x.BirthDate, BirthDate).Set(x => x.Email, Email).Set(x => x.LoginPhoneNumber, Login)
+            .Set(x => x.Password, Password).Set(x => x.PassportNumber, Passport)
+            .Set(x => x.MedicalPolicyNumber, MedicalPolicyNumber).Set(x => x.TaxIdenticalNumber, TaxIdenticalNumber)
+            .Set(x => x.InsuranceNumber, InsuranceNumber).Set(x => x.City, City).Set(x => x.Street, Street)
+            .Set(x => x.BuildingNumber, Building).Set(x => x.AppartmentNumber, Appartment));   
+            
+
+        }
+
+
+
+
 }

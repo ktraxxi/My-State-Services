@@ -1,8 +1,7 @@
 ﻿@page "/authorization"
 @inject IJSRuntime js
 
-<div class="registration">
-    <div></div>
+
 
     <div class="on_border">
         <div class="border">
@@ -24,8 +23,6 @@
         </div>
     </div>
 
-    <div></div>
-</div>
 
 @code {
     public string PhoneNumber { get; set; }
@@ -37,6 +34,7 @@
     {
         Authorize();
         LocalStorageSave();
+        User.IsAuthorizedTrue();
     }
 
     public void Authorize()
@@ -54,7 +52,7 @@
         await storage.SetStringAsync("key-name", MyUser.FirstName);
         await storage.SetStringAsync("key-surname", MyUser.Surname);
         await storage.SetStringAsync("key-patronymic", MyUser.Patronymic);
-        await storage.SetStringAsync("key-birth", MyUser.BirthDate.ToString());
+        await storage.SetStringAsync("key-birth", MyUser.BirthDate);
         await storage.SetStringAsync("key-email", MyUser.Email);
         await storage.SetStringAsync("key-login", MyUser.LoginPhoneNumber);
         await storage.SetStringAsync("key-password", MyUser.Password);
