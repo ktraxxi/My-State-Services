@@ -35,6 +35,7 @@ namespace Project_State_Services.Models
         public User(string firstName, string surname, string patronymic,
             string loginPhoneNumber, string password)
         {
+            PhotoName = "/icons/avatar.jpg";
             FirstName = firstName;
             Surname = surname;
             Patronymic = patronymic;
@@ -54,6 +55,7 @@ namespace Project_State_Services.Models
 
         public static bool isAuthorized;
         [BsonId] public ObjectId _id { get; set; }
+        [BsonElement("Фото профиля")] public string PhotoName { get; set; }
         [BsonElement("Имя")] public string FirstName { get; set; }
         [BsonElement("Фамилия")] public string Surname { get; set; }
         [BsonElement("Отчество")] public string Patronymic { get; set; }

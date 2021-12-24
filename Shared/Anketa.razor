@@ -2,6 +2,9 @@
 @using MongoDB.Bson;
 @using MongoDB.Bson.Serialization.Attributes;
 @using MongoDB.Driver;
+@using Microsoft.AspNetCore.Components.Forms;
+@using Project_State_Services.Models;
+@inject IUploadPhoto uploadPhoto;
 
 <div class="account">
 
@@ -33,12 +36,14 @@
 
     <div class="photo_and_btns">
         <div class="avatar">
-            <img src="/icons/avatar.jpg" />
+            <img src=@PhotoName />
         </div>
 
         <div class="upload_avatar">
             <div class="reg_button">
-                <div><a href="#">Загрузить фото</a></div>
+                <div><InputFile OnChange="HandleFileSelected" /></div>
+
+                @*<a @onclick="SaveProfilePhoto" href="#">Сохранить фото</a>*@
             </div>
         </div>
 
@@ -51,7 +56,7 @@
 
     <div class="edit_btn">
         <div class="reg_button">
-            <div><a @onclick="Editor" href="#" >Редактировать данные</a></div>
+            <div><a @onclick="Editor" href="#">Редактировать данные</a></div>
         </div>
     </div>
 
@@ -65,25 +70,40 @@
 
 @code {
 
-    [BsonIgnoreIfNull]    public string Name { get; set; }
-    [BsonIgnoreIfNull]    public string Surname { get; set; }
-    [BsonIgnoreIfNull]    public string Patronymic { get; set; }
-    [BsonIgnoreIfNull]    public string BirthDate { get; set; }
-    [BsonIgnoreIfNull]    public string Email { get; set; }
-    [BsonIgnoreIfNull]    public string Login { get; set; }
-    [BsonIgnoreIfNull]    public string Password { get; set; }
-    [BsonIgnoreIfNull]    public string Passport { get; set; }
-    [BsonIgnoreIfNull]    public string MedicalPolicyNumber { get; set; }
-    [BsonIgnoreIfNull]    public string TaxIdenticalNumber { get; set; }
-    [BsonIgnoreIfNull]    public string InsuranceNumber { get; set; }
-    [BsonIgnoreIfNull]    public string City { get; set; }
-    [BsonIgnoreIfNull]    public string Street { get; set; }
-    [BsonIgnoreIfNull]    public string Building { get; set; }
-    [BsonIgnoreIfNull]    public string Appartment { get; set; }
+    IFileListEntry file;
+
+    async Task HandleFileSelected(IFileListEntry[] files)
+    {
+        file = files.FirstOrDefault();
+
+        if (file != null)
+        {
+            await uploadPhoto.Upload(file);
+            PhotoName = $"user_avatars/{file.Name}";
+        }
+    }
+
+    [BsonIgnoreIfNull] public string PhotoName { get; set; }
+    [BsonIgnoreIfNull] public string Name { get; set; }
+    [BsonIgnoreIfNull] public string Surname { get; set; }
+    [BsonIgnoreIfNull] public string Patronymic { get; set; }
+    [BsonIgnoreIfNull] public string BirthDate { get; set; }
+    [BsonIgnoreIfNull] public string Email { get; set; }
+    [BsonIgnoreIfNull] public string Login { get; set; }
+    [BsonIgnoreIfNull] public string Password { get; set; }
+    [BsonIgnoreIfNull] public string Passport { get; set; }
+    [BsonIgnoreIfNull] public string MedicalPolicyNumber { get; set; }
+    [BsonIgnoreIfNull] public string TaxIdenticalNumber { get; set; }
+    [BsonIgnoreIfNull] public string InsuranceNumber { get; set; }
+    [BsonIgnoreIfNull] public string City { get; set; }
+    [BsonIgnoreIfNull] public string Street { get; set; }
+    [BsonIgnoreIfNull] public string Building { get; set; }
+    [BsonIgnoreIfNull] public string Appartment { get; set; }
 
 
     public async void LocalStorageLoadName()
     {
+        PhotoName = await storage.GetStringAsync("key-photoname");
         Name = await storage.GetStringAsync("key-name");
         Surname = await storage.GetStringAsync("key-surname");
         Patronymic = await storage.GetStringAsync("key-patronymic");
@@ -112,6 +132,7 @@
 
     public async void ClearData()
     {
+        await storage.RemoveAsync("key-photoname");
         await storage.RemoveAsync("key-name");
         await storage.RemoveAsync("key-surname");
         await storage.RemoveAsync("key-patronymic");
@@ -139,16 +160,14 @@
         var collection = db.GetCollection<User>("Users");
 
 
-        collection.UpdateOne(x => x.LoginPhoneNumber == Login, Builders<User>.Update
+        collection.UpdateOne(x => x.LoginPhoneNumber == Login, Builders<User>.Update.Set(x => x.PhotoName, PhotoName)
             .Set(x => x.FirstName, Name).Set(x => x.Surname, Surname).Set(x => x.Patronymic, Patronymic)
             .Set(x => x.BirthDate, BirthDate).Set(x => x.Email, Email).Set(x => x.LoginPhoneNumber, Login)
             .Set(x => x.Password, Password).Set(x => x.PassportNumber, Passport)
             .Set(x => x.MedicalPolicyNumber, MedicalPolicyNumber).Set(x => x.TaxIdenticalNumber, TaxIdenticalNumber)
             .Set(x => x.InsuranceNumber, InsuranceNumber).Set(x => x.City, City).Set(x => x.Street, Street)
-            .Set(x => x.BuildingNumber, Building).Set(x => x.AppartmentNumber, Appartment));   
-            
-
-        }
+            .Set(x => x.BuildingNumber, Building).Set(x => x.AppartmentNumber, Appartment));
+    }
 
 
 
