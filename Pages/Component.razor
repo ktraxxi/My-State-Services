@@ -1,0 +1,36 @@
+﻿@page "/datepicker"
+
+<div class="row px-3">
+    <div class="col-lg-12 col-xl-8">
+        <div class="row">
+
+
+           
+                    <RadzenDatePicker @bind-Value=@value DateFormat="d" Class="w-100" />
+                          
+
+           
+        </div>
+    </div>
+    
+</div>
+
+@code {
+    DateTime? value = DateTime.Now;
+
+    IEnumerable<DateTime> dates = new DateTime[] { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
+    
+
+    void DateRenderSpecial(DateRenderEventArgs args)
+    {
+        if (dates.Contains(args.Date))
+        {
+            args.Attributes.Add("style", "background-color: #ff6d41; border-color: white;");
+        }
+    }
+
+    void DateRender(DateRenderEventArgs args)
+    {
+        args.Disabled = dates.Contains(args.Date);
+    }
+}

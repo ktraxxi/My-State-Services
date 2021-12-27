@@ -8,27 +8,58 @@
 
 <div class="header_menu">
     <ul class="header_refs">
-        <li><a @onclick="CheckIfStorageIsEmpty" class="header_button" href="/account">Личный кабинет</a></li>
+        <li><a @onclick="OpenDeleteDialog" class="header_button" href="#">Личный кабинет</a></li>
         <li><a class="header_button" href="/authorization">Вход</a></li>
         <li><a class="header_button" href="/registration">Регистрация</a></li>
 
     </ul>
 </div>
 
+@if (DeleteDialogOpen)
+{
+    <ModalDialog Title="Вы не авторизованы"
+                 Text="Чтобы войти в личный кабинет, пожалуйста, выполните авторизацию или зарегистрируйтесь"
+                 ButtonText="Ок"
+                 OnClose="@OnDeleteDialogClose">
+    </ModalDialog>
+}
+
 <div></div>
 
 @code {
-    public void CheckIfStorageIsEmpty()
+    //public void CheckIfStorageIsEmpty()
+    //{
+    //    if (User.isAuthorized == true)
+    //    {
+    //        nm.NavigateTo("/account");
+    //    }
+    //    else
+    //    {
+    //        nm.NavigateTo("/authorization");
+    //    }
+    //}
+
+    public bool DeleteDialogOpen { get; set; }
+
+    private async Task OnDeleteDialogClose(bool accepted)
     {
+        DeleteDialogOpen = false;
+        StateHasChanged();
+    }
+    private void OpenDeleteDialog()
+    {
+
         if (User.isAuthorized == true)
         {
             nm.NavigateTo("/account");
         }
         else
         {
-            nm.NavigateTo("/authorization");
+            DeleteDialogOpen = true;
+            //nm.NavigateTo("/index");
         }
-    }
 
+        StateHasChanged();
+    }
 
 }

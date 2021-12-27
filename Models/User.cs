@@ -39,7 +39,7 @@ namespace Project_State_Services.Models
             FirstName = firstName;
             Surname = surname;
             Patronymic = patronymic;
-            BirthDate = "нет данных";
+            BirthDate = DateTime.Now.ToString();
             Email = "нет данных";
             LoginPhoneNumber = loginPhoneNumber;
             Password = password;

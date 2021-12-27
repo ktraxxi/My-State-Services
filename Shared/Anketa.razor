@@ -4,7 +4,7 @@
 @using MongoDB.Driver;
 @using Microsoft.AspNetCore.Components.Forms;
 @using Project_State_Services.Models;
-@inject IUploadPhoto uploadPhoto;
+@inject IUploadPhoto uploadPhoto
 
 <div class="account">
 
@@ -15,7 +15,7 @@
                 <tr> <td>Имя</td> <td>@Name</td> <td><input @bind="Name" class="field_account2" type="text" maxlength="20"></td> </tr>
                 <tr> <td>Отчество</td> <td>@Patronymic</td> <td><input @bind="Patronymic" class="field_account2" type="text" maxlength="20"></td> </tr>
 
-                <tr> <td>Дата рождения</td> <td>@BirthDate</td> <td><input @bind="BirthDate" class="field_account2" type="text" maxlength="20" placeholder="ДД.ММ.ГГГГ"></td> </tr>
+                <tr> <td>Дата рождения</td> <td>@BirthDate</td> <td><RadzenDatePicker @bind-Value=@BirthDate_DateTime DateFormat="d" DateRender="DateRender" class="w-150" />@*<input @bind="BirthDate" class="field_account2" type="text" maxlength="20" placeholder="ДД.ММ.ГГГГ">*@</td> </tr>
                 <tr> <td>Электронная почта</td> <td>@Email</td> <td><input @bind="Email" class="field_account2" type="text" maxlength="20"></td> </tr>
                 <tr> <td>Номер телефона</td> <td>@Login</td> <td><input @bind="Login" class="field_account2" type="text" maxlength="20"></td> </tr>
 
@@ -41,18 +41,26 @@
 
         <div class="upload_avatar">
             <div class="reg_button">
-                <div><InputFile OnChange="HandleFileSelected" /></div>
-
-                @*<a @onclick="SaveProfilePhoto" href="#">Сохранить фото</a>*@
+                <div><InputFile Id='foo' style="display:none;" OnChange="HandleFileSelected" /></div>
+                <div class="label_button"><label for='foo' style="cursor: pointer"><span>Загрузить фото</span></label></div>
+                
             </div>
         </div>
 
         <div class="appointment">
             <div class="reg_button">
-                <div><a href="#">Мои записи</a></div>
+                <div><a href="/datepicker">Мои записи</a></div>
             </div>
         </div>
     </div>
+
+    @if (DeleteDialogOpen)
+    {
+        <ModalDialog Title="Are you sure?"
+                     Text="Do you want to delete this entry?"
+                     OnClose="@OnDeleteDialogClose">
+        </ModalDialog>
+    }
 
     <div class="edit_btn">
         <div class="reg_button">
@@ -69,6 +77,18 @@
 </div>
 
 @code {
+    public bool DeleteDialogOpen { get; set; }
+
+    private async Task OnDeleteDialogClose(bool accepted)
+    {
+        DeleteDialogOpen = false;
+        StateHasChanged();
+    }
+    private void OpenDeleteDialog()
+    {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+    }
 
     IFileListEntry file;
 
@@ -99,6 +119,40 @@
     [BsonIgnoreIfNull] public string Street { get; set; }
     [BsonIgnoreIfNull] public string Building { get; set; }
     [BsonIgnoreIfNull] public string Appartment { get; set; }
+
+
+
+
+    public static DateTime? BirthDate_DateTime = DateTime.Now;
+
+    IEnumerable<DateTime> dates = new DateTime[] { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
+
+
+    void DateRenderSpecial(DateRenderEventArgs args)
+    {
+        if (dates.Contains(args.Date))
+        {
+            args.Attributes.Add("style", "background-color: #ff6d41; border-color: white;");
+        }
+    }
+
+    void DateRender(DateRenderEventArgs args)
+    {
+        if (args.Date > DateTime.Today.Date)
+        {
+            args.Disabled = true;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
 
     public async void LocalStorageLoadName()
@@ -162,7 +216,7 @@
 
         collection.UpdateOne(x => x.LoginPhoneNumber == Login, Builders<User>.Update.Set(x => x.PhotoName, PhotoName)
             .Set(x => x.FirstName, Name).Set(x => x.Surname, Surname).Set(x => x.Patronymic, Patronymic)
-            .Set(x => x.BirthDate, BirthDate).Set(x => x.Email, Email).Set(x => x.LoginPhoneNumber, Login)
+            .Set(x => x.BirthDate, BirthDate_DateTime.ToString()).Set(x => x.Email, Email).Set(x => x.LoginPhoneNumber, Login)
             .Set(x => x.Password, Password).Set(x => x.PassportNumber, Passport)
             .Set(x => x.MedicalPolicyNumber, MedicalPolicyNumber).Set(x => x.TaxIdenticalNumber, TaxIdenticalNumber)
             .Set(x => x.InsuranceNumber, InsuranceNumber).Set(x => x.City, City).Set(x => x.Street, Street)
