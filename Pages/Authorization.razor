@@ -1,30 +1,51 @@
 ﻿@page "/authorization"
 @inject IJSRuntime js
+@inject NavigationManager nm
 
+<div class="on_border">
+    <div class="border">
 
-
-    <div class="on_border">
-        <div class="border">
-
-            <div class="title_reg">
-                <div><h1>Вход в личный кабинет</h1></div>
-                <div><span>Пожалуйста, введите номер телефона и пароль</span></div>
-            </div>
-
-            <div class="autho_field_list">
-                <li><input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер телефона / Логин" required></li>
-                <li><input @bind-value="Password" class="field" type="text" maxlength="20" placeholder="Пароль" required></li>
-            </div>
-
-            <div class="reg_button">
-                <div><a @onclick="AuthorizeAndStorage" href="/account">Вход в личный кабинет</a></div>
-            </div>
-
+        <div class="title_reg">
+            <div><h1>Вход в личный кабинет</h1></div>
+            <div><span>Пожалуйста, введите номер телефона и пароль</span></div>
         </div>
+
+        <div class="autho_field_list">
+            <li><input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер телефона / Логин" required></li>
+            <li><input @bind-value="Password" class="field" type="text" maxlength="20" placeholder="Пароль" required></li>
+        </div>
+
+        <div class="reg_button">
+            <div><a @onclick="AuthorizeAndStorage" href="/authorization">Вход в личный кабинет</a></div>
+        </div>
+
+        @if (DeleteDialogOpen)
+        {
+            <ModalDialog Title="Ошибка авторизации"
+                         Text="Вы неправильно ввели логин или пароль. Повторите попытку"
+                         ButtonText="Ок"
+                         OnClose="@OnDeleteDialogClose">
+            </ModalDialog>
+        }
+
     </div>
+</div>
 
 
 @code {
+    public bool DeleteDialogOpen { get; set; }
+
+    private async Task OnDeleteDialogClose()
+    {
+        DeleteDialogOpen = false;
+        StateHasChanged();
+    }
+    private void OpenDeleteDialog(bool accepted)
+    {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+    }
+
     public string PhoneNumber { get; set; }
     public string Password { get; set; }
     public User MyUser { get; set; }
@@ -33,8 +54,16 @@
     public void AuthorizeAndStorage()
     {
         Authorize();
-        LocalStorageSave();
-        User.IsAuthorizedTrue();
+        if (MyUser != null)
+        {
+            LocalStorageSave();
+            User.IsAuthorizedTrue();
+            nm.NavigateTo("/account");
+        }
+        else
+        {
+            OpenDeleteDialog(true);
+        }
     }
 
     public void Authorize()
@@ -65,12 +94,5 @@
         await storage.SetStringAsync("key-street", MyUser.Street);
         await storage.SetStringAsync("key-building", MyUser.BuildingNumber);
         await storage.SetStringAsync("key-appartment", MyUser.AppartmentNumber);
-
     }
-
-    //public async void LocalStorageLoad()
-    //{
-    //    str1 = await storage.GetStringAsync("number");
-    //    StateHasChanged();
-    //}
 }

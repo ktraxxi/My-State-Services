@@ -1,29 +1,48 @@
 ﻿@page "/registration"
+@inject NavigationManager nm
+@using MongoDB.Bson;
+@using MongoDB.Bson.Serialization.Attributes;
+@using MongoDB.Driver;
 
 
+<div class="on_border">
+    <div class="border">
 
-    <div class="on_border">
-        <div class="border">
-
-            <div class="title_reg">
-                <div><h1>Регистрация</h1></div>
-                <div><span>Пожалуйста, заполните все поля</span></div>
-            </div>
-
-            <div class="field_list">
-                <div><input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер телефона / Логин" required></div>
-                <div><input @bind-value="Password" class="field" type="text" maxlength="20" placeholder="Пароль" required></div>
-                <div><input @bind-value="Surname" class="field" type="text" maxlength="20" placeholder="Фамилия" required></div>
-                <div><input @bind-value="Name" class="field" type="text" maxlength="20" placeholder="Имя" required></div>
-                <div><input @bind-value="Patronymic" class="field" type="text" maxlength="20" placeholder="Отчество" required></div>
-            </div>
-
-            <div class="reg_button">
-                <div><a @onclick="RegistrToDB" href="#">Регистрация</a></div>
-            </div>
-
+        <div class="title_reg">
+            <div><h1>Регистрация</h1></div>
+            <div><span>Пожалуйста, заполните все поля</span></div>
         </div>
+
+        <div class="field_list">
+            <div><input @bind-value="PhoneNumber" class="field" type="text" maxlength="20" placeholder="Номер телефона / Логин" required></div>
+            <div><input @bind-value="Password" class="field" type="text" maxlength="20" placeholder="Пароль" required></div>
+            <div><input @bind-value="Surname" class="field" type="text" maxlength="20" placeholder="Фамилия" required></div>
+            <div><input @bind-value="Name" class="field" type="text" maxlength="20" placeholder="Имя" required></div>
+            <div><input @bind-value="Patronymic" class="field" type="text" maxlength="20" placeholder="Отчество" required></div>
+        </div>
+
+        <div class="reg_button">
+            <div><a @onclick="RegistrToDB" href="/registration">Регистрация</a></div>
+        </div>
+        @if (DeleteDialogOpen2)
+            {
+                <ModalDialog Title="Регистрация прошла успешно"
+                             Text="Вы успешно зарегистрировались. Войдите под своей учетной записью, чтобы воспользоваться услугами сервиса."
+                             ButtonText="Войти в личный кабинет"
+                             ButtonLink="/authorization"
+                             OnClose="OnDeleteDialogClose2" />
+            }
+
+        @if (DeleteDialogOpen)
+        {
+            <ModalDialog Title="Ошибка регистрации"
+                         Text="Введеный вами логин уже зарегистрирован в системе. Для продолжения выберите другой логин"
+                         ButtonText="Ок" 
+                         OnClose="OnDeleteDialogClose" />
+        }
+
     </div>
+</div>
 
 
 @code {
@@ -35,7 +54,45 @@
 
     public void RegistrToDB()
     {
-        User.Registration(new User(Name, Surname, Patronymic, PhoneNumber, Password));
+        var client = new MongoClient("mongodb://localhost");
+        var db = client.GetDatabase("State_Services_Users");
+        var collection = db.GetCollection<User>("Users");
+        var checkLogin = collection.Find(x => x.LoginPhoneNumber == PhoneNumber).FirstOrDefault();
+
+        if (checkLogin == null)
+        {
+            User.Registration(new User(Name, Surname, Patronymic, PhoneNumber, Password));
+            OpenDeleteDialog2();
+            //nm.NavigateTo("/");
+        }
+        else
+        {
+            OpenDeleteDialog();
+        }
+        //OnDeleteDialogClose();
     }
 
+    public bool DeleteDialogOpen { get; set; }
+    public bool DeleteDialogOpen2 { get; set; }
+
+    private async Task OnDeleteDialogClose(bool accepted)
+    {
+        DeleteDialogOpen = false;
+        StateHasChanged();
+    }
+    private void OpenDeleteDialog()
+    {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+    }
+    private async Task OnDeleteDialogClose2(bool accepted)
+    {
+        DeleteDialogOpen2 = false;
+        StateHasChanged();
+    }
+    private void OpenDeleteDialog2()
+    {
+        DeleteDialogOpen2 = true;
+        StateHasChanged();
+    }
 }

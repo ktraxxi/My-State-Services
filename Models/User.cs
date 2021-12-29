@@ -54,6 +54,7 @@ namespace Project_State_Services.Models
         }
 
         public static bool isAuthorized;
+        public static bool isRegistered;
         [BsonId] public ObjectId _id { get; set; }
         [BsonElement("Фото профиля")] public string PhotoName { get; set; }
         [BsonElement("Имя")] public string FirstName { get; set; }
@@ -80,7 +81,15 @@ namespace Project_State_Services.Models
         {
             isAuthorized = false;
         }
-        
+        public static void IsRegisteredTrue()
+        {
+            isRegistered = true;
+        }
+        public static void IsRegisteredFalse()
+        {
+            isRegistered = false;
+        }           
+
         public static void Registration(User user)
         {
             var client = new MongoClient("mongodb://localhost");

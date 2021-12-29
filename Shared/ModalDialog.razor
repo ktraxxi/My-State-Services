@@ -1,4 +1,6 @@
-﻿<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);"
+﻿@inject NavigationManager nm
+
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);"
      aria-modal="true" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -14,7 +16,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" @onclick=@ModalOk>@ButtonText</button>
+                <button type="button" class="btn btn-primary" href="@ButtonLink" @onclick=@ModalOk>@ButtonText</button>
             </div>
 
 
@@ -26,6 +28,7 @@
     [Parameter] public string Title { get; set; }
     [Parameter] public string Text { get; set; }
     [Parameter] public string ButtonText { get; set; }
+    [Parameter] public string ButtonLink { get; set; }
     [Parameter] public EventCallback<bool> OnClose { get; set; }
 
     private Task ModalCancel()
@@ -35,6 +38,10 @@
 
     private Task ModalOk()
     {
+        if (ButtonLink != null)
+        {
+            nm.NavigateTo(ButtonLink);
+        }
         return OnClose.InvokeAsync(true);
     }
 
