@@ -1,11 +1,13 @@
-﻿<div class="services">
+﻿@inject NavigationManager nm
+
+<div class="services">
     <div class="title">Наши услуги</div>
-    <div class="serv vax"><a @onclick="OpenDeleteDialog" class="service_button" href="#">Запись на вакцинацию<br>от COVID-19</a><img class="img_serv" src="/icons/vax.svg"> </div>
-    <div class="serv medicine"><a @onclick="OpenDeleteDialog" class="service_button" href="#">Запись к врачу</a><img class="img_serv" src="/icons/medicine.svg"></div>
-    <div class="serv driving"><a @onclick="OpenDeleteDialog" class="service_button" href="#">Запись в автошколу</a><img class="img_serv" src="/icons/car.svg"></div>
-    <div class="serv pay_fine"><a @onclick="OpenDeleteDialog" class="service_button" href="#">Оплатить штраф ПДД</a><img class="img_serv" src="/icons/policeman.svg"></div>
-    <div class="serv school"><a @onclick="OpenDeleteDialog" class="service_button" href="#">Запись ребенка в школу<br>или детский сад</a><img class="img_serv" src="/icons/school.svg"></div>
-    <div class="serv passport"><a @onclick="OpenDeleteDialog" class="service_button" href="#">Подать заявку на<br>получение загранпаспорта</a><img class="img_serv" src="/icons/passport.svg"></div>
+    <div class="serv vax"><a @onclick="OpenDeleteDialog1" class="service_button" href="#">Запись на вакцинацию<br>от COVID-19</a><img class="img_serv" src="/icons/vax.svg"> </div>
+    <div class="serv medicine"><a @onclick="OpenDeleteDialog2" class="service_button" href="#">Запись к врачу</a><img class="img_serv" src="/icons/medicine.svg"></div>
+    <div class="serv driving"><a @onclick="OpenDeleteDialog3" class="service_button" href="#">Запись в автошколу</a><img class="img_serv" src="/icons/car.svg"></div>
+    <div class="serv pay_fine"><a @onclick="OpenDeleteDialog4" class="service_button" href="#">Оплатить штраф ПДД</a><img class="img_serv" src="/icons/policeman.svg"></div>
+    <div class="serv school"><a @onclick="OpenDeleteDialog5" class="service_button" href="#">Запись ребенка в школу<br>или детский сад</a><img class="img_serv" src="/icons/school.svg"></div>
+    <div class="serv passport"><a @onclick="OpenDeleteDialog6" class="service_button" href="#">Подать заявление на<br> загранпаспорт</a><img class="img_serv" src="/icons/passport.svg"></div>
 </div>
 
 @if (DeleteDialogOpen && User.isAuthorized == false)
@@ -25,9 +27,58 @@
         DeleteDialogOpen = false;
         StateHasChanged();
     }
-    private void OpenDeleteDialog()
+    private void OpenDeleteDialog1()
     {
         DeleteDialogOpen = true;
         StateHasChanged();
+        if (User.isAuthorized == true)
+        {
+            nm.NavigateTo("/vaccination");
+        }
+    }
+    private void OpenDeleteDialog2()
+    {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+        if (User.isAuthorized == true)
+        {
+            nm.NavigateTo("/doctor");
+        }
+    }
+    private void OpenDeleteDialog3()
+    {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+        if (User.isAuthorized == true)
+        {
+            nm.NavigateTo("/drive_school");
+        }
+    }
+    private void OpenDeleteDialog4()
+    {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+        if (User.isAuthorized == true)
+        {
+            nm.NavigateTo("/payments");
+        }
+    }
+    private void OpenDeleteDialog5()
+    {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+        if (User.isAuthorized == true)
+        {
+            nm.NavigateTo("/school");
+        }
+    }
+    private void OpenDeleteDialog6()
+    {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+        if (User.isAuthorized == true)
+        {
+            nm.NavigateTo("/abroad_passport");
+        }
     }
 }

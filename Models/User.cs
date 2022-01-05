@@ -10,28 +10,6 @@ namespace Project_State_Services.Models
 {
     public class User
     {
-        public User(string firstName, string surname, string patronymic, 
-            string birthDate, string email, string loginPhoneNumber, string password, 
-            string passportNumber, string medicalPolicyNumber, 
-            string taxIdenticalNumber, string insuranceNumber, 
-            string city, string street, string buildingNumber, string appartmentNumber)
-        {
-            FirstName = firstName;
-            Surname = surname;
-            Patronymic = patronymic;
-            BirthDate = birthDate;
-            Email = email;
-            LoginPhoneNumber = loginPhoneNumber;
-            Password = password;
-            PassportNumber = passportNumber;
-            MedicalPolicyNumber = medicalPolicyNumber;
-            TaxIdenticalNumber = taxIdenticalNumber;
-            InsuranceNumber = insuranceNumber;
-            City = city;
-            Street = street;
-            BuildingNumber = buildingNumber;
-            AppartmentNumber = appartmentNumber;
-        }
         public User(string firstName, string surname, string patronymic,
             string loginPhoneNumber, string password)
         {
@@ -52,9 +30,10 @@ namespace Project_State_Services.Models
             BuildingNumber = "нет данных";
             AppartmentNumber = "нет данных";
         }
-
+        
         public static bool isAuthorized;
         public static bool isRegistered;
+        public static List<Services> AppointmentsList = new List<Services>();
         [BsonId] public ObjectId _id { get; set; }
         [BsonElement("Фото профиля")] public string PhotoName { get; set; }
         [BsonElement("Имя")] public string FirstName { get; set; }
@@ -80,15 +59,7 @@ namespace Project_State_Services.Models
         public static void IsAuthorizedFalse()
         {
             isAuthorized = false;
-        }
-        public static void IsRegisteredTrue()
-        {
-            isRegistered = true;
-        }
-        public static void IsRegisteredFalse()
-        {
-            isRegistered = false;
-        }           
+        }         
 
         public static void Registration(User user)
         {
@@ -96,6 +67,14 @@ namespace Project_State_Services.Models
             var db = client.GetDatabase("State_Services_Users");
             var collection = db.GetCollection<User>("Users");
             collection.InsertOne(user);            
+        }
+        public static void AppointmentRegistration(string login, string serviceType, DateTime? appointment)
+        {
+            var client = new MongoClient("mongodb://localhost");
+            var db = client.GetDatabase("State_Services_Users");
+            var collection = db.GetCollection<Services>("Appointments");
+            string date = appointment.ToString();
+            collection.InsertOne(new Services(login, serviceType, date));
         }
         public static User Authorization(string login, string password, User user)
         {
@@ -112,13 +91,14 @@ namespace Project_State_Services.Models
             var collection = db.GetCollection<User>("Users");
             return collection.Find(x => true).ToList();
         }
-        public static void Redact(string AnketaLogin, string firstName, string surname
-            //, string patronymic,
-            //string birthDate, string email, string loginPhoneNumber, string password,
-            //string passportNumber, string medicalPolicyNumber,
-            //string taxIdenticalNumber, string insuranceNumber,
-            //string city, string street, string buildingNumber, string appartmentNumber
-            )
+        public static List<Services> UserAppointmentList()
+        {
+            var client = new MongoClient("mongodb://localhost");
+            var db = client.GetDatabase("State_Services_Users");
+            var collection = db.GetCollection<Services>("Appointments");
+            return collection.Find(x => true).ToList();            
+        }
+        public static void Redact(string AnketaLogin, string firstName, string surname)
         {
             var client = new MongoClient("mongodb://localhost");
             var db = client.GetDatabase("State_Services_Users");

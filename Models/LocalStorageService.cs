@@ -15,6 +15,8 @@ namespace Project_State_Services.Models
         {
             _jsRuntime = jsRuntime;
         }
+
+
         public async Task SetAsync<T>(string key, T item) where T : class
         {
             var data = JsonSerializer.Serialize(item);
@@ -24,7 +26,8 @@ namespace Project_State_Services.Models
         {
             _jsRuntime.InvokeAsync<string>("set", key, value);
             return Task.CompletedTask;
-        }
+        }      
+
 
         public async Task<T> GetAsync<T>(string key) where T : class
         {
@@ -35,18 +38,16 @@ namespace Project_State_Services.Models
             }
             return JsonSerializer.Deserialize<T>(data)!;
         }
-
         public async Task<string> GetStringAsync(string key)
         {
             return await _jsRuntime.InvokeAsync<string>("get", key);
         }
+        
 
         public Task RemoveAsync(string key)
         {
             _jsRuntime.InvokeAsync<string>("remove", key);
             return Task.CompletedTask;
         }
-
-
     }
 }

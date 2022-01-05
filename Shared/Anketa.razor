@@ -42,24 +42,25 @@
         <div class="upload_avatar">
             <div class="reg_button">
                 <div><InputFile Id='foo' style="display:none;" OnChange="HandleFileSelected" /></div>
-                <div class="label_button"><label for='foo' style="cursor: pointer"><span>Загрузить фото</span></label></div>
-                
+                <div class="label_button"><label for='foo' style="cursor: pointer"><span>Загрузить фото</span></label></div>                
             </div>
         </div>
 
         <div class="appointment">
             <div class="reg_button">
-                <div><a href="/datepicker">Мои записи</a></div>
+                <div><a @onclick="OpenDeleteDialog" href="/account">Мои записи</a></div>
             </div>
         </div>
     </div>
 
     @if (DeleteDialogOpen)
     {
-        <ModalDialog Title="Are you sure?"
-                     Text="Do you want to delete this entry?"
-                     OnClose="@OnDeleteDialogClose">
-        </ModalDialog>
+        <AppointmentList 
+                         ButtonText="OK" 
+                         Title="Ваши записи на услуги" 
+                         OnClose="@OnDeleteDialogClose"
+                         Login="@Login"
+                         MyServices="@Appointments"/>
     }
 
     <div class="edit_btn">
@@ -84,11 +85,14 @@
         DeleteDialogOpen = false;
         StateHasChanged();
     }
+
     private void OpenDeleteDialog()
     {
+        Appointments = User.UserAppointmentList();
         DeleteDialogOpen = true;
         StateHasChanged();
     }
+
 
     IFileListEntry file;
 
@@ -103,30 +107,11 @@
         }
     }
 
-    [BsonIgnoreIfNull] public string PhotoName { get; set; }
-    [BsonIgnoreIfNull] public string Name { get; set; }
-    [BsonIgnoreIfNull] public string Surname { get; set; }
-    [BsonIgnoreIfNull] public string Patronymic { get; set; }
-    [BsonIgnoreIfNull] public string BirthDate { get; set; }
-    [BsonIgnoreIfNull] public string Email { get; set; }
-    [BsonIgnoreIfNull] public string Login { get; set; }
-    [BsonIgnoreIfNull] public string Password { get; set; }
-    [BsonIgnoreIfNull] public string Passport { get; set; }
-    [BsonIgnoreIfNull] public string MedicalPolicyNumber { get; set; }
-    [BsonIgnoreIfNull] public string TaxIdenticalNumber { get; set; }
-    [BsonIgnoreIfNull] public string InsuranceNumber { get; set; }
-    [BsonIgnoreIfNull] public string City { get; set; }
-    [BsonIgnoreIfNull] public string Street { get; set; }
-    [BsonIgnoreIfNull] public string Building { get; set; }
-    [BsonIgnoreIfNull] public string Appartment { get; set; }
-
-
 
 
     public static DateTime? BirthDate_DateTime = DateTime.Now;
 
     IEnumerable<DateTime> dates = new DateTime[] { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
-
 
     void DateRenderSpecial(DateRenderEventArgs args)
     {
@@ -146,15 +131,26 @@
 
 
 
+    [BsonIgnoreIfNull] public string PhotoName { get; set; }
+    [BsonIgnoreIfNull] public string Name { get; set; }
+    [BsonIgnoreIfNull] public string Surname { get; set; }
+    [BsonIgnoreIfNull] public string Patronymic { get; set; }
+    [BsonIgnoreIfNull] public string BirthDate { get; set; }
+    [BsonIgnoreIfNull] public string Email { get; set; }
+    [BsonIgnoreIfNull] public string Login { get; set; }
+    [BsonIgnoreIfNull] public string Password { get; set; }
+    [BsonIgnoreIfNull] public string Passport { get; set; }
+    [BsonIgnoreIfNull] public string MedicalPolicyNumber { get; set; }
+    [BsonIgnoreIfNull] public string TaxIdenticalNumber { get; set; }
+    [BsonIgnoreIfNull] public string InsuranceNumber { get; set; }
+    [BsonIgnoreIfNull] public string City { get; set; }
+    [BsonIgnoreIfNull] public string Street { get; set; }
+    [BsonIgnoreIfNull] public string Building { get; set; }
+    [BsonIgnoreIfNull] public string Appartment { get; set; }
+    [BsonIgnoreIfNull] public List<Services> Appointments { get; set; }
 
 
-
-
-
-
-
-
-
+    //List<Services> list = new List<Services>();
     public async void LocalStorageLoadName()
     {
         PhotoName = await storage.GetStringAsync("key-photoname");
@@ -202,6 +198,8 @@
         await storage.RemoveAsync("key-street");
         await storage.RemoveAsync("key-building");
         await storage.RemoveAsync("key-appartment");
+        await storage.RemoveAsync("key-serviceslist");
+        await storage.RemoveAsync("key-appointment");
 
         User.IsAuthorizedFalse();
         StateHasChanged();
@@ -213,7 +211,6 @@
         var db = client.GetDatabase("State_Services_Users");
         var collection = db.GetCollection<User>("Users");
 
-
         collection.UpdateOne(x => x.LoginPhoneNumber == Login, Builders<User>.Update.Set(x => x.PhotoName, PhotoName)
             .Set(x => x.FirstName, Name).Set(x => x.Surname, Surname).Set(x => x.Patronymic, Patronymic)
             .Set(x => x.BirthDate, BirthDate_DateTime.ToString()).Set(x => x.Email, Email).Set(x => x.LoginPhoneNumber, Login)
@@ -222,8 +219,4 @@
             .Set(x => x.InsuranceNumber, InsuranceNumber).Set(x => x.City, City).Set(x => x.Street, Street)
             .Set(x => x.BuildingNumber, Building).Set(x => x.AppartmentNumber, Appartment));
     }
-
-
-
-
 }

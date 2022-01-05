@@ -1,0 +1,93 @@
+﻿@inject IJSRuntime js
+@using MongoDB.Bson;
+@using MongoDB.Bson.Serialization.Attributes;
+@using MongoDB.Driver;
+
+<div class="table">
+    <table class="account_table">
+        <thead>
+            <tr>
+                <th>Ваш логин</th>
+                <th>@ServiceType</th>
+                <th>Выбранное время</th>
+                <th>@ServiceDate</th>
+                <th>@Acception</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>@UserLogin</td>
+                <td>@ServiceTypeConcrete</td>
+                <td>@AppointmentDate.ToString()</td>
+                <td>
+                    <RadzenDatePicker TValue="DateTime?"
+                                      ShowTime="true"
+                                      ShowSeconds="false"
+                                      HoursStep="1"
+                                      MinutesStep="1"
+                                      SecondsStep="1"
+                                      DateFormat="dd/MM/yyyy HH:mm" Class="w-100"
+                                      DateRender="DateRender"
+                                      @bind-Value="@AppointmentDate" />
+                </td>
+                <td><div class="reg_button"><div><a @onclick="AddAppointmentToDb" href="#">Записаться</a></div></div></td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter] public string ServiceType { get; set; }
+    [Parameter] public string ServiceDate { get; set; }
+    [Parameter] public string Acception { get; set; }
+
+    [Parameter] public string ServiceTypeConcrete { get; set; }
+    [Parameter] public DateTime? AppointmentDate { get; set; } = DateTime.Now;
+    [Parameter] public string UserLogin { get; set; }
+
+    LocalStorageService storage;
+
+    public void AddAppointmentToDb()
+    {
+        User.AppointmentRegistration(UserLogin, ServiceTypeConcrete, AppointmentDate);
+    }
+
+
+
+
+    public async void LocalStorageLoadLogin()
+    {
+        UserLogin = await storage.GetStringAsync("key-login");
+        StateHasChanged();
+    }
+    protected override void OnInitialized()
+    {
+        storage = new LocalStorageService(js);
+        LocalStorageLoadLogin();
+    }
+
+
+
+
+    IEnumerable<DateTime> dates = new DateTime[] { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
+
+    void DateRenderSpecial(DateRenderEventArgs args)
+    {
+        if (dates.Contains(args.Date))
+        {
+            args.Attributes.Add("style", "background-color: #ff6d41; border-color: white;");
+        }
+    }
+
+    void DateRender(DateRenderEventArgs args)
+    {
+        if (args.Date < DateTime.Today.Date)
+        {
+            args.Disabled = true;
+        }
+    }
+
+
+}

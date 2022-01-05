@@ -1,0 +1,65 @@
+﻿<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);"
+     aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+                <h4 class="modal-title">@Title</h4>
+                <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="table">
+                    <table class="account_table">
+                        <thead>
+                            <tr>
+                                @*<th>Логин пользователя</th>*@
+                                <th>Вид услуги</th>
+                                <th>Ваше время</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in MyServices)
+                            {
+                                if (item.UserLogin == Login)
+                                {
+                                    <tr>
+                                        @*<td>@item.UserLogin</td>*@
+                                        <td>@item.ServiceType</td>
+                                        <td>@item.ServiceDate</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"  @onclick=@ModalOk>@ButtonText</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public List<Services> MyServices { get; set; }
+    [Parameter] public string Login { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string ButtonText { get; set; }
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+
+    private Task ModalCancel()
+    {
+        return OnClose.InvokeAsync(false);
+    }
+
+    private Task ModalOk()
+    {
+        return OnClose.InvokeAsync(true);
+    }
+
+}
