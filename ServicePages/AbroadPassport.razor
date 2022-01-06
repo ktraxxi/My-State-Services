@@ -1,5 +1,6 @@
 ﻿@page "/abroad_passport"
 @inject IJSRuntime js
+@inject NavigationManager nm
 
 <div style="display: grid; ">
 
@@ -18,9 +19,11 @@
                        Acception="Подтверждение"
                        ServiceTypeConcrete="@ServiceTypeConcrete"
                        AppointmentDate="@Appointment"
-                       UserLogin="@UserLogin"
+                       UserLogin="@UserLogin" 
                        />
     </div>
+
+    
 
 </div>
 
@@ -29,7 +32,8 @@
     public static string ServiceTypeConcrete = "Подача заявления на получение загранпаспорта";
     public static DateTime Appointment = DateTime.Now;
     LocalStorageService storage;
-    public static string UserLogin;    
+    public static string UserLogin;
+
 
     public async void LocalStorageLoadLogin()
     {
@@ -40,5 +44,5 @@
     {
         storage = new LocalStorageService(js);
         LocalStorageLoadLogin();
-    }
+    }    
 }

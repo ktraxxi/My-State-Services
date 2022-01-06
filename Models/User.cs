@@ -32,7 +32,7 @@ namespace Project_State_Services.Models
         }
         
         public static bool isAuthorized;
-        public static bool isRegistered;
+        public static bool serviceRegSuccess;
         public static List<Services> AppointmentsList = new List<Services>();
         [BsonId] public ObjectId _id { get; set; }
         [BsonElement("Фото профиля")] public string PhotoName { get; set; }

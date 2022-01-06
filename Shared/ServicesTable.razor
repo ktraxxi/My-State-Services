@@ -7,7 +7,6 @@
     <table class="account_table">
         <thead>
             <tr>
-                <th>Ваш логин</th>
                 <th>@ServiceType</th>
                 <th>Выбранное время</th>
                 <th>@ServiceDate</th>
@@ -17,7 +16,6 @@
         <tbody>
 
             <tr>
-                <td>@UserLogin</td>
                 <td>@ServiceTypeConcrete</td>
                 <td>@AppointmentDate.ToString()</td>
                 <td>
@@ -31,14 +29,40 @@
                                       DateRender="DateRender"
                                       @bind-Value="@AppointmentDate" />
                 </td>
-                <td><div class="reg_button"><div><a @onclick="AddAppointmentToDb" href="#">Записаться</a></div></div></td>
+                <td><div class="reg_button"><div><a @onclick="AddAppointmentToDb" href="@Link">Записаться</a></div></div></td>
             </tr>
 
         </tbody>
     </table>
+
+    @if (DeleteDialogOpen && User.serviceRegSuccess == true)
+    {
+        <ModalDialog Title="Запись на услугу совершена!"
+                     Text="Вы успешно записались на услугу. Вы можете просмотреть ваши записи на услуги в вашем Личном кабинете"
+                     ButtonText="Ок"
+                     OnClose="@OnDeleteDialogClose">
+        </ModalDialog>
+    }
+
 </div>
 
 @code {
+    public bool DeleteDialogOpen { get; set; }
+
+    private async Task OnDeleteDialogClose(bool accepted)
+    {
+        DeleteDialogOpen = false;
+        User.serviceRegSuccess = false;
+        StateHasChanged();
+    }
+    private void OpenDeleteDialog()
+    {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+    }
+
+
+
     [Parameter] public string ServiceType { get; set; }
     [Parameter] public string ServiceDate { get; set; }
     [Parameter] public string Acception { get; set; }
@@ -46,11 +70,14 @@
     [Parameter] public string ServiceTypeConcrete { get; set; }
     [Parameter] public DateTime? AppointmentDate { get; set; } = DateTime.Now;
     [Parameter] public string UserLogin { get; set; }
+    [Parameter] public string Link { get; set; }
 
     LocalStorageService storage;
 
     public void AddAppointmentToDb()
     {
+        User.serviceRegSuccess = true;
+        OpenDeleteDialog();
         User.AppointmentRegistration(UserLogin, ServiceTypeConcrete, AppointmentDate);
     }
 

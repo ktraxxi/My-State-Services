@@ -10,11 +10,19 @@
             </div>
 
             <div class="modal-body">
+
+                        @if (TempList.Count == 0)
+                        {
+                <h3>У вас пока нет назначенных записей</h3>
+                <p>Чтобы записаться на услугу, перейдите на главную страницу сервиса</p>
+                                                  
+                        }
+                        else 
+                        { 
                 <div class="table">
                     <table class="account_table">
                         <thead>
                             <tr>
-                                @*<th>Логин пользователя</th>*@
                                 <th>Вид услуги</th>
                                 <th>Ваше время</th>
                             </tr>
@@ -25,7 +33,6 @@
                                 if (item.UserLogin == Login)
                                 {
                                     <tr>
-                                        @*<td>@item.UserLogin</td>*@
                                         <td>@item.ServiceType</td>
                                         <td>@item.ServiceDate</td>
                                     </tr>
@@ -34,6 +41,7 @@
                         </tbody>
                     </table>
                 </div>
+                        }
             </div>
 
             <div class="modal-footer">
@@ -51,6 +59,20 @@
     [Parameter] public string Title { get; set; }
     [Parameter] public string ButtonText { get; set; }
     [Parameter] public EventCallback<bool> OnClose { get; set; }
+    List<Services> TempList = new List<Services>();
+
+
+    protected override void OnInitialized()
+    {
+        foreach (var item in MyServices)
+        {
+            if (item.UserLogin == Login)
+            {
+                TempList.Add(item);
+            }
+        }
+    }
+
 
     private Task ModalCancel()
     {
