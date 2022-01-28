@@ -1,16 +1,12 @@
 ﻿@page "/abroad_passport"
 @inject IJSRuntime js
-@inject NavigationManager nm
 
 <div style="display: grid; ">
-
     <div class="title" style="justify-self: center;">
-
         <h3 style="color: #548CF6; font-family: 'Montserrat', sans-serif;
      text-align: center; font-weight: bolder; margin-top: 40px; ">
             Запишитесь на прием в паспортный стол <br>для подачи заявления на загранпаспорт
         </h3>
-
     </div>
 
     <div style="justify-self:center;">
@@ -21,10 +17,7 @@
                        AppointmentDate="@Appointment"
                        UserLogin="@UserLogin" 
                        />
-    </div>
-
-    
-
+    </div>   
 </div>
 
 @code
@@ -33,7 +26,6 @@
     public static DateTime Appointment = DateTime.Now;
     LocalStorageService storage;
     public static string UserLogin;
-
 
     public async void LocalStorageLoadLogin()
     {

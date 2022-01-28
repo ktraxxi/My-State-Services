@@ -24,6 +24,7 @@
         <div class="reg_button">
             <div><a @onclick="RegistrToDB" href="/registration">Регистрация</a></div>
         </div>
+
         @if (DeleteDialogOpen2)
             {
                 <ModalDialog Title="Регистрация прошла успешно"
@@ -32,7 +33,6 @@
                              ButtonLink="/authorization"
                              OnClose="OnDeleteDialogClose2" />
             }
-
         @if (DeleteDialogOpen)
         {
             <ModalDialog Title="Ошибка регистрации"
@@ -40,7 +40,6 @@
                          ButtonText="Ок" 
                          OnClose="OnDeleteDialogClose" />
         }
-
     </div>
 </div>
 
@@ -63,13 +62,11 @@
         {
             User.Registration(new User(Name, Surname, Patronymic, PhoneNumber, Password));
             OpenDeleteDialog2();
-            //nm.NavigateTo("/");
         }
         else
         {
             OpenDeleteDialog();
         }
-        //OnDeleteDialogClose();
     }
 
     public bool DeleteDialogOpen { get; set; }

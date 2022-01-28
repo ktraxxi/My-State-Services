@@ -3,19 +3,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-
             <div class="modal-header">
                 <h4 class="modal-title">@Title</h4>
                 <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
             </div>
 
             <div class="modal-body">
-
                         @if (TempList.Count == 0)
                         {
                 <h3>У вас пока нет назначенных записей</h3>
-                <p>Чтобы записаться на услугу, перейдите на главную страницу сервиса</p>
-                                                  
+                <p>Чтобы записаться на услугу, перейдите на главную страницу сервиса</p>                                                  
                         }
                         else 
                         { 
@@ -73,15 +70,12 @@
         }
     }
 
-
     private Task ModalCancel()
     {
         return OnClose.InvokeAsync(false);
     }
-
     private Task ModalOk()
     {
         return OnClose.InvokeAsync(true);
     }
-
 }

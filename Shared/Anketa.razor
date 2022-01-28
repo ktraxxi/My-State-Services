@@ -78,6 +78,7 @@
 </div>
 
 @code {
+    //Модальное окно
     public bool DeleteDialogOpen { get; set; }
 
     private async Task OnDeleteDialogClose(bool accepted)
@@ -85,7 +86,6 @@
         DeleteDialogOpen = false;
         StateHasChanged();
     }
-
     private void OpenDeleteDialog()
     {
         Appointments = User.UserAppointmentList();
@@ -93,7 +93,7 @@
         StateHasChanged();
     }
 
-
+    //Загрузка фото
     IFileListEntry file;
 
     async Task HandleFileSelected(IFileListEntry[] files)
@@ -108,7 +108,7 @@
     }
 
 
-
+    //Дейтпикер
     public static DateTime? BirthDate_DateTime = DateTime.Now;
 
     IEnumerable<DateTime> dates = new DateTime[] { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
@@ -120,7 +120,6 @@
             args.Attributes.Add("style", "background-color: #ff6d41; border-color: white;");
         }
     }
-
     void DateRender(DateRenderEventArgs args)
     {
         if (args.Date > DateTime.Today.Date)
@@ -150,7 +149,6 @@
     [BsonIgnoreIfNull] public List<Services> Appointments { get; set; }
 
 
-    //List<Services> list = new List<Services>();
     public async void LocalStorageLoadName()
     {
         PhotoName = await storage.GetStringAsync("key-photoname");
