@@ -17,8 +17,4 @@
     <PackageReference Include="Radzen.Blazor" Version="3.13.11" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\user_avatars\" />
-  </ItemGroup>
-
 </Project>
